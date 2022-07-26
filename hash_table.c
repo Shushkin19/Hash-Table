@@ -48,3 +48,37 @@ static int ht_hash(const char* st, const int a, const int mod) {
 	}
 	return hash;
 }
+
+static int ht_get_hash(const char* c, const int num, const int att) {
+	
+	/// !!!!!!!!!!!!!!!!!
+	const int hash_a = ht_hash(c,HT_PRIME_1, num);
+
+	const int hash_b = ht_hash(c, HT_PRIME_2, num);
+	return (hash_a + (att * (hash_b + 1))) % num;
+	
+}
+
+void ht_insert(ht_hash_table* ht, const char* _key, const char* _value) {
+	ht_item* item = ht_init_item(_key, _value);
+	int ind = ht_get_hash(item->key, ht->size, 0);
+	ht_item* cur_item = ht->items[ind];
+	int i = 1;
+	while (cur_item != NULL) {
+		ind = ht_get_hash(item->key, ht->size, i);
+		cur_item = ht->items[ind];
+		i++;
+	}
+	ht->items[ind] = item;
+	ht->count++;
+
+}
+
+char* ht_search(ht_hash_table* ht, const char* _key) {
+
+
+}
+
+void ht_delete(ht_hash_table* ht, const char* _key) {
+
+}

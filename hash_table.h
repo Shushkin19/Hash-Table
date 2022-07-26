@@ -23,3 +23,11 @@ void ht_clear_hash_tb(ht_hash_table* ht);
 static int ht_hash(const char* st, const int a, const int mod);
 
 int alg_hash_calc(int i, char s, int ln, int a);
+
+static int ht_get_hash(const char* c, const int num, const int att);
+
+void ht_insert(ht_hash_table* ht, const char* _key, const char* _value);
+
+char* ht_search(ht_hash_table* ht, const char* _key);
+
+void ht_delete(ht_hash_table* ht, const char* _key);
