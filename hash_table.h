@@ -14,6 +14,8 @@ typedef struct {
 
 static ht_item* ht_init_item(const char* _key, const char* _value);
 
+static ht_hash_table* ht_init_sized_hash_tb(const int sizebased);
+
 ht_hash_table* ht_init_hash_tb();
 
 void ht_clear_item(ht_item* i);

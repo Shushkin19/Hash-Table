@@ -2,11 +2,20 @@
 #include<stdlib.h>
 #include<string.h>
 #include<math.h>
+
+static ht_item HT_DELETED_ITEM = { NULL, NULL };
+
 static ht_item* ht_init_item(const char* _key, const char* _value) {
 	ht_item* ht = (ht_item*)malloc(sizeof(ht_item));
 	ht->key = _strdup(_key); /// !!!
 	ht->value = _strdup(_value);
 	return ht;
+}
+
+ht_hash_table* ht_init_sized_hash_tb(const int sizebased)
+{
+	ht_hash_table* ht = (ht_hash_table*)malloc(sizeof(ht_hash_table));
+	/// nen
 }
 
 
@@ -65,6 +74,11 @@ void ht_insert(ht_hash_table* ht, const char* _key, const char* _value) {
 	ht_item* cur_item = ht->items[ind];
 	int i = 1;
 	while (cur_item != NULL) {
+		if (cur_item != &HT_DELETED_ITEM) {
+			if (strcmp(cur_item->key, _key) == 0) {
+				ht_clear_item(cur_item);
+			}
+		}
 		ind = ht_get_hash(item->key, ht->size, i);
 		cur_item = ht->items[ind];
 		i++;
@@ -75,10 +89,37 @@ void ht_insert(ht_hash_table* ht, const char* _key, const char* _value) {
 }
 
 char* ht_search(ht_hash_table* ht, const char* _key) {
-
-
+	int i = 1;
+	int ind = ht_get_hash(_key, ht->size, 0);
+	ht_item* item = ht->items[ind];
+	while (item != NULL) {
+		if (item != &HT_DELETED_ITEM) {
+			if (strcmp(item->key, _key) == 0) {
+				return item->value;
+			}
+		}
+		ind = ht_get_hash(_key, ht->size, i);
+		item = ht->items[ind];
+		i++;
+	}
+	return NULL;
 }
 
 void ht_delete(ht_hash_table* ht, const char* _key) {
+	int ind = ht_get_hash(_key, ht->size, 0);
+	int i = 1;
+	ht_item* item = ht->items[ind];
+	while (item != NULL) {
+		if (item != &HT_DELETED_ITEM) {
+			if (strcmp(item->key, _key) == 0) {
+				ht_clear_item(item);
+				ht->items[ind] = &HT_DELETED_ITEM;
+			}
+		}
+		ind = ht_get_hash(_key, ht->size, i);
+		item = ht->items[ind];
+		i++;
 
+	}
+	ht->count--;
 }
